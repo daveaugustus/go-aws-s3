@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{template "head_section" }}
+</head>
+<body>
+    {{template "navigation" }}
+
+    <main role="main" class="container">
+        {{template "formatter"}}
+
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Create Bucket</h6>
+    
+            <div class="media text-muted pt-3">
+                <form method="POST" >
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Bucket name must be unique</label>
+                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Enter the bucket name" name="bucketname">
+                        <br><br>
+                        <button type="submit" class="btn btn-primary" id="exampleFormControlFile1">Create</button>
+                      </div>
+                    
+                  </form>
+            </div>
+           
+            
+          </div>
+    </main>
+ 
+    {{template "scripts"}}
+</body>
+</html>

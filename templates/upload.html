@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{template "head_section" }}
+</head>
+<body>
+    {{template "navigation" }}
+
+    <main role="main" class="container">
+      {{template "formatter"}}
+
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Upload file</h6>
+    
+            <div class="media text-muted pt-3">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile" name="myfile">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                        <br><br>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Select bucket</label>
+                            <select class="form-control" id="exampleFormControlSelect1" name="bucketname">
+                                {{ range .Buckets}}
+                              <option value="{{ .Name }}">{{ .Name }}</option>
+                              {{end}}
+                            </select>
+                          </div>
+                        <br><br>
+                        <button type="submit" class="btn btn-primary" id="exampleFormControlFile1">Upload</button>
+                      </div>
+                  </form>
+            </div>
+           
+            
+          </div>
+    </main>
+ 
+    {{template "scripts"}}
+</body>
+</html>
