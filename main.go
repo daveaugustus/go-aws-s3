@@ -122,12 +122,24 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Printf("Ther is an err in uploading a file: %s", err.Error())
 		}
 		bucketName := r.PostForm.Get("bucketname")
-		fmt.Println(bucketName)
-		fmt.Println(file)
-		fmt.Println(fileHeader.Filename)
-		fmt.Println("The request method is post!")
-		// Uploading to the S3 bucket cunnrently will be stored in saffron ectension
-		//
+
+		fmt.Println("Uploading: ", fileHeader.Filename)
+		fmt.Printf("In %s bucket!\n", bucketName)
+
+		// Uploading to the S3 bucket where bucket can be selected using the drpodown
+		// in the html template.
+		// TODO: Error check needs to be corrected
+		response, err := s3session.PutObject(&s3.PutObjectInput{
+			Body:   file,
+			Bucket: aws.String(bucketName),
+			Key:    aws.String(fileHeader.Filename),
+			ACL:    aws.String(s3.BucketCannedACLPrivate),
+		})
+		if err != nil {
+			log.Printf("Error: while uploading to %s bucket", bucketName)
+		}
+		fmt.Println(response)
+
 	}
 
 	// Get method
@@ -136,4 +148,8 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 	if err := templates.ExecuteTemplate(w, "upload.html", buck); err != nil {
 		log.Fatal("Couldn't parse html template: upload.html")
 	}
+}
+
+func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
+
 }
