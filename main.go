@@ -49,6 +49,7 @@ func main() {
 	http.HandleFunc("/", BucketListHandler)
 	http.HandleFunc("/create-bucket", CreateBucketHandler)
 	http.HandleFunc("/upload", UploadFileHandler)
+	http.HandleFunc("/:buck_name", ListObjectHandler)
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		panic(err)
@@ -151,5 +152,16 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
+	param1 := r.URL.Query().Get("buck_name")
+	fmt.Println(param1)
+	response, err := s3session.ListObjectsV2(&s3.ListObjectsV2Input{
+		Bucket: aws.String("saffron-extension"),
+	})
+	if err != nil {
+		// TODO: Handle the error
+	}
 
+	if err := templates.ExecuteTemplate(w, "list_objects.html", response); err != nil {
+		log.Fatal("Couldn't parse html template: list_objects.html")
+	}
 }
