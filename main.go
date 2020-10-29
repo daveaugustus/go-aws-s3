@@ -47,7 +47,6 @@ func init() {
 // path
 func main() {
 	// Gorrila mux handler
-
 	router := mux.NewRouter()
 
 	router.HandleFunc("/", BucketListHandler).Methods("GET")
@@ -55,7 +54,7 @@ func main() {
 	router.HandleFunc("/create-bucket", CreateBucketPOSTHandler).Methods("POST")
 	router.HandleFunc("/upload", UploadFileGetHandler).Methods("GET")
 	router.HandleFunc("/upload", UploadFilePOSTHandler).Methods("POST")
-	router.HandleFunc("/:buck_name", ListObjectHandler)
+	router.HandleFunc("/{buck_name}", ListObjectGetHandler).Methods("GET")
 
 	fmt.Println("Starting the server on port: 8080")
 	if err := http.ListenAndServe(":8080", router); err != nil {
@@ -162,16 +161,17 @@ func UploadFilePOSTHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ListObjectHandler(w http.ResponseWriter, r *http.Request) {
-	param1 := r.URL.Query().Get("buck_name")
-	fmt.Println(param1)
+func ListObjectGetHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	fmt.Println(vars["buck_name"])
 	response, err := s3session.ListObjectsV2(&s3.ListObjectsV2Input{
-		Bucket: aws.String("saffron-extension"),
+		Bucket: aws.String(vars["buck_name"]),
 	})
 	if err != nil {
 		// TODO: Handle the error
 	}
 
+	fmt.Println(response)
 	if err := templates.ExecuteTemplate(w, "list_objects.html", response); err != nil {
 		log.Fatal("Couldn't parse html template: list_objects.html")
 	}
